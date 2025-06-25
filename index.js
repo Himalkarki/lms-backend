@@ -3,8 +3,12 @@ import { connectToDB } from "./config/db.js";
 import bookRouter from "./routes/bookRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import dotenv from "dotenv";
 
 const app = express();
+
+dotenv.config();
+
 const port = 5003;
 
 connectToDB();
