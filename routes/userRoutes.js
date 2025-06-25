@@ -4,6 +4,7 @@ import {
   registerUser,
   updateUser,
   deleteUser,
+  updatePassword,
 } from "../controllers/userControllers.js";
 import { checkAuthorization } from "../middleware/checkAuthorization.js";
 
@@ -16,6 +17,7 @@ router.route("/login").post(loginUser);
 router
   .route("/:userId")
   .put(checkAuthorization, updateUser)
+  .patch(checkAuthorization, updatePassword)
   .delete(checkAuthorization, deleteUser);
 
 export default router;
