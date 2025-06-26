@@ -198,6 +198,16 @@ export const updatePassword = async (req, res) => {
       });
     }
 
+    if (
+      foundUser._id.toString() !== req.user._id.toString() &&
+      !["Admin", "Staff"].includes(req.user.role)
+    ) {
+      return res.json({
+        success: false,
+        message: "You cannot password of this user!",
+      });
+    }
+
     const passwordMatched = await foundUser.isPasswordValid(oldPassword);
 
     if (!passwordMatched) {
