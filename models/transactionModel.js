@@ -35,6 +35,10 @@ const transactionSchema = new mongoose.Schema({
     enum: ["Pending", "Rejected", "Approved"],
     default: "Pending",
   },
+  returnedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+  },
 });
 
 export const TransactionModel = mongoose.model(

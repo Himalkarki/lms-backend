@@ -217,6 +217,7 @@ export const returnBook = async (req, res) => {
     foundTransaction.returnDate = Date.now();
 
     foundTransaction.returned = true;
+    foundTransaction.returnedTo = req.user._id;
 
     const issuedBook = await BookModel.findById(foundTransaction.book);
 
