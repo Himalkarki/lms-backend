@@ -23,8 +23,12 @@ export const getTransactions = async (req, res) => {
 
 export const createTransaction = async (req, res) => {
   try {
-    const { bookId, issuedTo } = req.body;
+    const { bookId, issuedTo, estimatedReturnDate } = req.body;
     const requestingUser = req.user;
+    const defaultIssuanceAllowedDays = 14;
+    const defaultEstimatedReturnDate = new Date(
+      Date.now() + defaultIssuanceAllowedDays * 24 * 60 * 60 * 1000
+    ).toISOString();
 
     if (!bookId) {
       return res.json({
@@ -54,7 +58,12 @@ export const createTransaction = async (req, res) => {
       issuedTo,
       book: bookId,
       status: requestingUser.role === "Member" ? "Pending" : "Approved",
+      estimatedReturnDate: estimatedReturnDate || defaultEstimatedReturnDate,
     });
+
+    bookExists.availability = false;
+
+    await bookExists.save();
 
     return res.json({
       success: true,
@@ -182,6 +191,45 @@ export const deleteTransaction = async (req, res) => {
     return res.json({
       success: true,
       message: "Issue order deleted successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const returnBook = async (req, res) => {
+  try {
+    const { transactionId } = req.params;
+
+    const foundTransaction = await TransactionModel.findById(transactionId);
+
+    if (!foundTransaction) {
+      return res.json({
+        success: false,
+        message: "No issue order found!!!",
+      });
+    }
+
+    foundTransaction.returnDate = Date.now();
+
+    foundTransaction.returned = true;
+
+    const issuedBook = await BookModel.findById(foundTransaction.book);
+
+    issuedBook.availability = true;
+
+    await foundTransaction.save();
+
+    await issuedBook.save();
+
+    res.json({
+      success: true,
+      message: "Book returned Successfully!!!",
+      data: foundTransaction,
     });
   } catch (error) {
     console.log(error);

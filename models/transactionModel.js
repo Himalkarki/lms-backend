@@ -24,6 +24,9 @@ const transactionSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  estimatedReturnDate: {
+    type: Date,
+  },
   returnDate: {
     type: Date,
   },

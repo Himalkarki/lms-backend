@@ -29,5 +29,11 @@ app.use("/api/books", bookRouter);
 app.use("/api/transactions", transactionRoutes);
 
 app.listen(port, () => {
+  const f14daysfromNow = Date.now() + 14 * 24 * 60 * 60 * 1000;
+  console.log(
+    new Date(f14daysfromNow).toTimeString(),
+    new Date(f14daysfromNow).toDateString()
+  );
+  console.log(new Date(f14daysfromNow).toISOString());
   console.log(`Server running on ${port}`);
 });
