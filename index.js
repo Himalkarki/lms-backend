@@ -4,8 +4,12 @@ import { connectToDB } from "./config/db.js";
 import bookRouter from "./routes/bookRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import dotenv from "dotenv";
 
 const app = express();
+
+dotenv.config();
+
 const port = 5003;
 
 connectToDB();
@@ -27,5 +31,11 @@ app.use("/api/books", bookRouter);
 app.use("/api/transactions", transactionRoutes);
 
 app.listen(port, () => {
+  const f14daysfromNow = Date.now() + 14 * 24 * 60 * 60 * 1000;
+  console.log(
+    new Date(f14daysfromNow).toTimeString(),
+    new Date(f14daysfromNow).toDateString()
+  );
+  console.log(new Date(f14daysfromNow).toISOString());
   console.log(`Server running on ${port}`);
 });
