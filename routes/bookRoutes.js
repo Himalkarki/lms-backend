@@ -12,7 +12,7 @@ const bookRouter = express.Router();
 
 bookRouter
   .route("/")
-  .get(checkAuthorization, getBooksController)
+  .get(getBooksController)
   .post(checkAuthorization, checkStaffLevelPermissions, createBookController);
 
 bookRouter
