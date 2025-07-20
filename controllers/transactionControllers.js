@@ -9,7 +9,7 @@ export const getTransactions = async (req, res) => {
       .populate("book");
 
     return res.json({
-      success: false,
+      success: true,
       data: transactions,
     });
   } catch (error) {
