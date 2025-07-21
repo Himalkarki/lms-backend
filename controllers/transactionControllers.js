@@ -3,6 +3,20 @@ import { TransactionModel } from "../models/transactionModel.js";
 
 export const getTransactions = async (req, res) => {
   try {
+    const user = req.user;
+
+    if (user.role === "Member") {
+      const transactions = await TransactionModel.find({ issuedTo: user._id })
+        .populate("issuedBy")
+        .populate("issuedTo")
+        .populate("book");
+
+      return res.json({
+        success: true,
+        data: transactions,
+      });
+    }
+
     const transactions = await TransactionModel.find()
       .populate("issuedBy")
       .populate("issuedTo")
