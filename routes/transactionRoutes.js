@@ -15,7 +15,7 @@ const router = express.Router();
 router
   .route("/")
   .post(checkAuthorization, createTransaction)
-  .get(getTransactions);
+  .get(checkAuthorization, checkStaffLevelPermissions, getTransactions);
 
 router
   .route("/:transactionId")
