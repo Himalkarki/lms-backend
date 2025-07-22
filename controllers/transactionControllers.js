@@ -9,7 +9,8 @@ export const getTransactions = async (req, res) => {
       const transactions = await TransactionModel.find({ issuedTo: user._id })
         .populate("issuedBy")
         .populate("issuedTo")
-        .populate("book");
+        .populate("book")
+        .populate("returnedTo");
 
       return res.json({
         success: true,
@@ -20,7 +21,8 @@ export const getTransactions = async (req, res) => {
     const transactions = await TransactionModel.find()
       .populate("issuedBy")
       .populate("issuedTo")
-      .populate("book");
+      .populate("book")
+      .populate("returnedTo");
 
     return res.json({
       success: true,
@@ -219,7 +221,10 @@ export const returnBook = async (req, res) => {
   try {
     const { transactionId } = req.params;
 
-    const foundTransaction = await TransactionModel.findById(transactionId);
+    const foundTransaction = await TransactionModel.findById(transactionId)
+      .populate("book")
+      .populate("issuedTo")
+      .populate("issuedBy");
 
     if (!foundTransaction) {
       return res.json({
@@ -233,13 +238,15 @@ export const returnBook = async (req, res) => {
     foundTransaction.returned = true;
     foundTransaction.returnedTo = req.user._id;
 
-    const issuedBook = await BookModel.findById(foundTransaction.book);
+    const issuedBook = await BookModel.findById(foundTransaction.book._id);
 
     issuedBook.availability = true;
 
     await foundTransaction.save();
 
     await issuedBook.save();
+
+    foundTransaction.returnedTo = req.user;
 
     res.json({
       success: true,
