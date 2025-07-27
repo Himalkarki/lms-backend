@@ -37,7 +37,11 @@ userSchema.method("isPasswordValid", async function (password) {
   return result;
 });
 
-userSchema.pre("save", async function () {
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
   const password = this.password;
   const saltRounds = 10;
   const salt = await bcrypt.genSalt(saltRounds);
