@@ -81,6 +81,7 @@ export const loginUser = async (req, res) => {
         address: foundUser.address,
         phoneNumber: foundUser.phoneNumber,
         token: token,
+        role: foundUser.role,
       };
 
       return res.json({
