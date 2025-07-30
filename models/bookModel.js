@@ -7,7 +7,10 @@ const bookSchema = new mongoose.Schema({
   publicationDate: Date,
   genre: String,
   noOfPages: Number,
-  availability: Boolean,
+  availability: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 export const BookModel = mongoose.model("books", bookSchema);
