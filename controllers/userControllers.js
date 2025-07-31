@@ -53,8 +53,6 @@ export const loginUser = async (req, res) => {
 
     const foundUser = await UserModel.findOne({ email: reqBody.email });
 
-    console.log(foundUser);
-
     if (!foundUser) {
       return res.json({
         success: false,
@@ -189,6 +187,13 @@ export const updatePassword = async (req, res) => {
   try {
     const { userId } = req.params;
     const { newPassword, oldPassword } = req.body;
+
+    if (!newPassword || !oldPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all fields!",
+      });
+    }
 
     const foundUser = await UserModel.findById(userId);
 

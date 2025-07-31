@@ -10,7 +10,10 @@ export const getTransactions = async (req, res) => {
         .populate("issuedBy")
         .populate("issuedTo")
         .populate("book")
-        .populate("returnedTo");
+        .populate("returnedTo")
+        .sort({
+          issueDate: -1,
+        });
 
       return res.json({
         success: true,
@@ -22,7 +25,10 @@ export const getTransactions = async (req, res) => {
       .populate("issuedBy")
       .populate("issuedTo")
       .populate("book")
-      .populate("returnedTo");
+      .populate("returnedTo")
+      .sort({
+        issueDate: -1,
+      });
 
     return res.json({
       success: true,
