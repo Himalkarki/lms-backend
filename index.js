@@ -8,6 +8,7 @@ import memberRoutes from "./routes/memberRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -17,7 +18,14 @@ const port = 5003;
 
 connectToDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 app.use(express.json());
 
 app.get("api/test", (req, res) => {

@@ -1,5 +1,6 @@
 import { UserModel, validateUserSchema } from "../models/userModel.js";
 import { generateToken } from "../utils/generateToken.js";
+import { sendAuthCookies } from "../utils/sendAuthCookies.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -81,6 +82,8 @@ export const loginUser = async (req, res) => {
         token: token,
         role: foundUser.role,
       };
+
+      sendAuthCookies(token, res);
 
       return res.json({
         success: true,
